@@ -63,57 +63,101 @@ if(porcentaje>contador_sucias):
 
 tiempo = 0
 movimientos = 0
-posx = 0
-posy = 0
-
 #Mientras el porcentaje sea mayor que 0 o el tiempo sea menor que el indicado, se seguirá ejecutando el programa
 while(porcentaje > 0 and tiempo <= tmax):
     inicio = time.time()
-    
     for i in range (cant_agentes):
         if(habitaciones[agentes[i].x][agentes[i].y] == 1):
-            print("Agente "+str(i)+" limpiando la celda ("+str(agentes[i].x)+ ", " +str(agentes[i].y)+")")
+            print("Agente "+str(i+1)+" limpiando la celda ("+str(agentes[i].x)+ ", " +str(agentes[i].y)+")")
             habitaciones[agentes[i].x][agentes[i].y] = 0
-            visitadas[agentes[i].x][agentes[i].y] = 1
             porcentaje -= 1
-            rand_val_1 = random.randrange(-1, 2, 2)
-            rand_val_2 = random.randrange(-1, 2, 2)
-            if((agentes[i].x+rand_val_1) < 0 or
-               (agentes[i].x+rand_val_1) > (filas-1) or
-               (agentes[i].y+rand_val_2) < 0 or
-               (agentes[i].y+rand_val_2) > (columnas-1) or
-               (visitadas[agentes[i].x + rand_val_1][agentes[i].y+rand_val_2] == 1)):
-              continue
-            else: 
-              agentes[i].x += rand_val_1
-              agentes[i].y += rand_val_2
-              print("Moviendo agente " +str(i)+ " a la casilla ("+str([agentes[i].x])+", "+str([agentes[i].y])+")")
-              movimientos += 1
-              
-        elif(habitaciones[agentes[i].x][agentes[i].y] == 0 and visitadas[agentes[i].x][agentes[i].y] == 0):
-            
             visitadas[agentes[i].x][agentes[i].y] = 1
-            rand_val_1 = random.randrange(-1, 2, 2)
-            rand_val_2 = random.randrange(-1, 2, 2)
-            if((agentes[i].x+rand_val_1) < 0 or
-               (agentes[i].x+rand_val_1) > (filas-1) or
-               (agentes[i].y+rand_val_2) < 0 or
-               (agentes[i].y+rand_val_2) > (columnas-1) or
-               (visitadas[agentes[i].x + rand_val_1][agentes[i].y+rand_val_2] == 1)):
-                print("Si llego aqui", i)
-                continue
-            else:
-              print("Aqui igual llego")
-              agentes[i].x += rand_val_1
-              agentes[i].y += rand_val_2
-              print("Moviendo agente " +str(i)+ " a la casilla ("+str([agentes[i].x])+", "+str([agentes[i].y])+")")
-              movimientos += 1
-        
-        fin = time.time()
-        tiempo += (fin-inicio)
+            ciclo = True
+            posx = -1
+            posy = -1
+            count = 0
+            while(ciclo == True):
+                
+                if((agentes[i].x+posx) >= 0 and
+                   (agentes[i].x+posx) <= (filas-1) and
+                   (agentes[i].y+posy) >= 0 and
+                   (agentes[i].y+posy) <= (columnas-1) and
+                   visitadas[agentes[i].x + posx][agentes[i].y + posy] == 0):
+                    agentes[i].x += posx
+                    agentes[i].y += posy
+                    print("Moviendo agente " +str(i+1)+ " a la casilla ("+str([agentes[i].x])+", "+str([agentes[i].y])+")")
+                    movimientos += 1
+                    ciclo = False
+                
+                elif(count == 7):
+                    rand_val_1 = random.randint(-1, 1)
+                    rand_val_2 = random.randint(-1, 1)
+                    if((agentes[i].x+rand_val_1) < 0 or
+                       (agentes[i].x+rand_val_1) > (filas-1) or
+                       (agentes[i].y+rand_val_2) < 0 or
+                       (agentes[i].y+rand_val_2) > (columnas-1) or
+                       (rand_val_1 == 0 and rand_val_2 == 0)):
+                        ciclo = False
+                    else: 
+                      agentes[i].x += rand_val_1
+                      agentes[i].y += rand_val_2
+                      print("Moviendo agente " +str(i+1)+ " a la casilla ("+str([agentes[i].x])+", "+str([agentes[i].y])+")")
+                      movimientos += 1
+                      ciclo = False
+                    
+                elif(count%2 == 0):
+                    posx+=1
+                    count+=1
+                elif(count%2 == 1):
+                    posy+=1
+                    count+=1
+              
+        elif(habitaciones[agentes[i].x][agentes[i].y] == 0):
+            visitadas[agentes[i].x][agentes[i].y] = 1
+            ciclo = True
+            posx = -1
+            posy = -1
+            count = 0
+            while(ciclo == True):
+                if((agentes[i].x+posx) >= 0 and
+                   (agentes[i].x+posx) <= (filas-1) and
+                   (agentes[i].y+posy) >= 0 and
+                   (agentes[i].y+posy) <= (columnas-1) and
+                   visitadas[agentes[i].x +posx][agentes[i].y+posy] == 0):
+                    agentes[i].x += posx
+                    agentes[i].y += posy
+                    print("Moviendo agente " +str(i+1)+ " a la casilla ("+str([agentes[i].x])+", "+str([agentes[i].y])+")")
+                    movimientos += 1
+                    ciclo = False
+                
+                elif(count == 7):
+                    rand_val_1 = random.randint(-1, 1)
+                    rand_val_2 = random.randint(-1, 1)
+                    if((agentes[i].x+rand_val_1) < 0 or
+                       (agentes[i].x+rand_val_1) > (filas-1) or
+                       (agentes[i].y+rand_val_2) < 0 or
+                       (agentes[i].y+rand_val_2) > (columnas-1) or
+                       (rand_val_1 == 0 and rand_val_2 == 0)):
+                        ciclo = False
+                    else: 
+                      agentes[i].x += rand_val_1
+                      agentes[i].y += rand_val_2
+                      print("Moviendo agente " +str(i+1)+ " a la casilla ("+str([agentes[i].x])+", "+str([agentes[i].y])+")")
+                      movimientos += 1
+                      ciclo = False
+                    
+                elif(count%2 == 0):
+                    posx+=1
+                    count+=1
+                elif(count%2 == 1):
+                    posy+=1
+                    count+=1
+                    
+    fin = time.time()
+    tiempo += (fin-inicio)
 
 
-
+print(habitaciones)
 #Ciclo para contar la cantidad de habitaciones limpias
 limpias = 0
 for i in range (filas):
